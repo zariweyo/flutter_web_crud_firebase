@@ -86,12 +86,16 @@ class MFile implements MTableable,MEditableGroupObject{
     if(_map['path']!=null) {
       path = _map['path'];
     }
+    if(_map['id']!=null) {
+      id = _map['id'];
+    }
   }
 
   toMap(){
     Map<String,dynamic> _map = new Map<String,dynamic>();
     _map['description'] = description;
     _map['path'] = path;
+    _map['id'] = id;
     _map['type'] = type.toString().split(".")[1];
     return _map;
   }
