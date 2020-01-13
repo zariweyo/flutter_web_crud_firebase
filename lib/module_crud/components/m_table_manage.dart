@@ -7,9 +7,10 @@ class MTableManage extends StatefulWidget{
   Function() onEndList;
   Function() onActionGlobal;
   Function(MTableable) onDelItem;
-  List<Map<String,dynamic>> onCustomActions;
+  List<MTableManageAction> onCustomActions;
   Function(MTableable) onEditItem;
   Function(MTableable,bool) onCheckItem;
+  Function(String) onSearchChange;
   String titleDelete;
   String messageDelete;
   String title;
@@ -18,12 +19,32 @@ class MTableManage extends StatefulWidget{
   EdgeInsetsGeometry margin;
   IconData iconActionGlobal;
   double height;
-  bool refreshOnChange;
+
+  Color deleteIconColor;
+  Color headerTextColor;
+  Color headerBackgroundColor;
+  Color editIconColor;
+  Color customIconColor;
+  Color checkboxColor;
+  Color backgroundColor;
+  Color borderColor;
+  String hintSearch;
   
 
-  MTableManage({Key key, this.onAddItem,this.height,this.refreshOnChange=false, @required this.items,this.margin=EdgeInsets.zero, @required this.title,this.onEndList, 
+  MTableManage({Key key, this.onAddItem,this.height,@required this.items,this.onSearchChange,this.margin=EdgeInsets.zero, @required this.title,this.onEndList, 
     this.onDelItem,this.itemsChecked, this.onEditItem,this.onCheckItem, this.titleDelete="",this.messageDelete="",
-    this.iconActionGlobal=Icons.settings,this.onActionGlobal, this.onCustomActions  }) :super(key:key);
+    this.iconActionGlobal=Icons.settings,this.onActionGlobal, this.onCustomActions,
+    this.deleteIconColor = Colors.white,
+    this.headerTextColor = Colors.white,
+    this.headerBackgroundColor = Colors.black,
+    this.editIconColor = Colors.white,
+    this.customIconColor = Colors.white,
+    this.checkboxColor = Colors.green,
+    this.backgroundColor = Colors.white,
+    this.borderColor = Colors.black,
+    this.hintSearch = "Search",
+
+      }) :super(key:key);
 
   @override
   _MTableManageState createState() => _MTableManageState();
@@ -76,7 +97,7 @@ class _MTableManageState extends State<MTableManage>{
             return Expanded(
               flex:1,
               child: IconButton(
-                icon: Icon(Icons.delete),
+                icon: Icon(Icons.delete, color: widget.deleteIconColor),
                 onPressed: (){
                   UtilMessages.showConfirmDialog(context, widget.titleDelete,  widget.messageDelete,
                     onAccept: (_context){
@@ -110,7 +131,7 @@ class _MTableManageState extends State<MTableManage>{
 
     return IconButton(
       icon: Icon(Icons.add_circle_outline),
-      color: Colors.black,
+      color: widget.headerTextColor,
       iconSize: 30,
       onPressed: (){
         widget.onAddItem();
@@ -125,7 +146,7 @@ class _MTableManageState extends State<MTableManage>{
 
     return IconButton(
       icon: Icon(widget.iconActionGlobal),
-      color: Colors.black,
+      color: widget.headerTextColor,
       iconSize: 30,
       onPressed: (){
         widget.onActionGlobal();
@@ -138,7 +159,7 @@ class _MTableManageState extends State<MTableManage>{
       return Expanded(
       flex:1,
       child: IconButton(
-        icon: Icon(Icons.edit),
+        icon: Icon(Icons.edit, color: widget.editIconColor),
         onPressed: (){
           if(widget.onEditItem!=null){
             widget.onEditItem(_item);
@@ -151,13 +172,36 @@ class _MTableManageState extends State<MTableManage>{
     return MEmpty();
   }
 
-  _printCustomActionButton(MTableable _item, Map<String,dynamic> customAction){
-    if(customAction["action"] != null && customAction["icon"] != null) {
+  _printSearchField(){
+    if(widget.onSearchChange!=null){
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(5))
+        ),
+        child:TextField(
+          decoration: new InputDecoration.collapsed(
+            hintText: widget.hintSearch
+          ),
+          onChanged: (_change){
+            widget.onSearchChange(_change);
+          },
+        )
+      );
+    }
+
+    return MEmpty();
+  }
+
+  _printCustomActionButton(MTableable _item, MTableManageAction customAction){
+    if(customAction.action != null && customAction.icon != null) {
       return Expanded(
         flex:1,
         child: IconButton(
-          icon: Icon(customAction["icon"]),
-          onPressed: () => customAction["action"](_item),
+          icon: Icon(customAction.icon),
+          color: widget.customIconColor,
+          onPressed: () => customAction.action(_item),
         )
       );
     }
@@ -169,6 +213,7 @@ class _MTableManageState extends State<MTableManage>{
       return Expanded(
       flex:1,
       child: Checkbox(
+        checkColor: widget.checkboxColor,
         activeColor: Colors.transparent,
         value: widget.itemsChecked.where((_it)=>_it.getId()==_item.getId()).length>0,
         onChanged: (selected){
@@ -307,27 +352,34 @@ class _MTableManageState extends State<MTableManage>{
           margin:EdgeInsets.only(top:0,left:0,bottom: 10,right: 0),
           width:MediaQuery.of(context).size.width,
 
-          color:Colors.white,
-          child:Row(
+      decoration: BoxDecoration(
+        color: widget.headerBackgroundColor,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(10.0))
+      ),
+          child: Row(
             children: <Widget>[
               Expanded(
                 flex:10,
                 child:Text(
                     widget.title,
                     style: TextStyle(
-                      color: Colors.black,
+                      color: widget.headerTextColor,
                       fontSize: 20
                     ),
                   )
               ),
               Expanded(
+                flex:5,
+                child: _printSearchField()
+              ),
+              Expanded(
                 flex:1,
                 child: _printAddButton()
-                ),
-                Expanded(
+              ),
+              Expanded(
                 flex:1,
                 child: _printActionGlobal()
-                ),
+              ),
                 
             ]
           )
@@ -353,11 +405,6 @@ class _MTableManageState extends State<MTableManage>{
       );
     });
 
-    ValueKey _valueKey = ValueKey("__");
-    if(widget.refreshOnChange){
-      _valueKey = ValueKey(Mfunctions.generateUuid());
-    }
-
     _widgets.add(
       Expanded(
         flex:10,
@@ -365,7 +412,6 @@ class _MTableManageState extends State<MTableManage>{
           //height: 300,
           //child:Scrollbar(
             child:ListView(
-              key:_valueKey,
               controller: scrollcontroller,
               children:cards
             )
@@ -382,10 +428,19 @@ class _MTableManageState extends State<MTableManage>{
       margin:widget.margin,
       alignment: Alignment.centerLeft,
       width:MediaQuery.of(context).size.width,    
-      height: widget.height,  
+      height: widget.height,
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white),
-        borderRadius: BorderRadius.all(Radius.circular(5))
+        color: widget.backgroundColor,
+        border: Border.all(color: widget.borderColor),
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.4),
+            spreadRadius: 2,
+            blurRadius: 2,
+            offset: Offset(0, 4),
+          ),
+        ],
       ),
       child:Column(
         children: _printCards(),
@@ -393,4 +448,14 @@ class _MTableManageState extends State<MTableManage>{
     );
   }
 
+}
+
+class MTableManageAction{
+  IconData icon;
+  Function(MTableable) action;
+
+  MTableManageAction({
+    @required this.icon,
+    @required this.action
+  });
 }
