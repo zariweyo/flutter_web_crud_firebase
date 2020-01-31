@@ -26,6 +26,7 @@ class MReorderableCards extends StatefulWidget {
   Color headerBackgroundColor;
 
   Color backgroundColor;
+  Color backgroundColorActiveCard;
 
   MReorderableCards({Key key,
     this.reorderableObjects,
@@ -47,6 +48,7 @@ class MReorderableCards extends StatefulWidget {
     this.headerTextColor=Colors.white,
     this.headerBackgroundColor=Colors.black,
     this.backgroundColor=Colors.white,
+    this.backgroundColorActiveCard=Colors.yellow,
   }
   ) : super(key: key);
 
@@ -60,7 +62,7 @@ class _MReorderableCardsState extends State<MReorderableCards> {
   List<String> initNameInPage=[];
   String objectIdPressed="";
   List<MReorderableObject> reorderableObjects;
-  List<CrudCard> cards = new List<CrudCard>();
+  Map<String,CrudCard> cards = new Map<String,CrudCard>();
   String title="";
 
 
@@ -101,7 +103,7 @@ class _MReorderableCardsState extends State<MReorderableCards> {
             backgroundcolor: widget.cardBackgroundColor,
             borderColor: widget.cardBorderColor,
             borderWidth: 1.0,
-            backgroundcolorActive: Color(0xFF7AC2EC),
+            backgroundcolorActive: widget.backgroundColorActiveCard,
             onPress: (){
               if(objectIdPressed==_object.reorderableId()){
                 objectIdPressed="";
@@ -111,10 +113,11 @@ class _MReorderableCardsState extends State<MReorderableCards> {
                 if(widget.onItemPressed!=null) widget.onItemPressed(_object);
               }
 
-              
+              objectIdPressed=objectIdPressed;
+              changePressedCard();
 
               setState(() {
-                objectIdPressed=objectIdPressed;
+                
               });
               
             },
@@ -122,29 +125,23 @@ class _MReorderableCardsState extends State<MReorderableCards> {
   }
 
 
-
-  List<Widget> reLoadCards(){
-    cards = new List<CrudCard>();
+  reLoadCards(){
+    cards = new Map<String,CrudCard>();
     _objectSorted();
-    
     reorderableObjects.forEach((_object){
-      cards.add(
-        _printCrudCard(_object)
-      );
+      cards[_object.reorderableId()] = _printCrudCard(_object);
     });
 
   }
 
   changePressedCard(){
-    int i = 0;
     reorderableObjects.forEach((_object){
-      if(objectIdPressed==_object.reorderableId() || cards[i].pressed==true){
-        cards[i]=_printCrudCard(_object);
+      if(objectIdPressed==_object.reorderableId() || cards[_object.reorderableId()].pressed==true){
+        cards[_object.reorderableId()]=_printCrudCard(_object);
       }else{
-        cards[i].pressed = false;
+        cards[_object.reorderableId()].pressed = false;
       }
       
-      i++;
     });
   }
 
@@ -186,7 +183,7 @@ class _MReorderableCardsState extends State<MReorderableCards> {
           });
         },
         dragDirection: Axis.vertical,
-        children: cards,
+        children: cards.values.toList(),
         colorOnDrag: Colors.transparent,//Colors.blueGrey[400],
         canDrag: widget.canDrag,
       )

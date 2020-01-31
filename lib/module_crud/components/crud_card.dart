@@ -39,7 +39,6 @@ class _CrudCardState extends State<CrudCard>{
   initState(){
     image=widget.image;
     backgroundcolor=widget.pressed?  widget.backgroundcolorActive : widget.backgroundcolor ;
-    
     super.initState();
     
   }
@@ -50,6 +49,12 @@ class _CrudCardState extends State<CrudCard>{
     if(backgroundcolor!=oldWidget.backgroundcolor || image.toString()!=oldWidget.image.toString()){
       backgroundcolor=widget.pressed?  Colors.white12 : Colors.black26 ;
       image=widget.image;
+    }
+    if(widget.pressed != oldWidget.pressed){
+      print("PRESSED");
+      setState(() {
+        
+      });
     }
     super.didUpdateWidget(oldWidget);
   }
