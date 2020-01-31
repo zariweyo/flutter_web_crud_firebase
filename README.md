@@ -1,14 +1,12 @@
 # flutter_web_crud_firebase
 
-A new Flutter package project.
+This is a complete tools for read a save data in firestore and firestorage. This only works in Flutter web.
+
+The idea is a simple abstract class which can implement in a model class to give CRUD funcionalities.
+
+There are tables, upload files, orderable list and image fields.
 
 ## Getting Started
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+You can get this package from 
+[package](https://github.com/zariweyo/flutter_web_crud_firebase).

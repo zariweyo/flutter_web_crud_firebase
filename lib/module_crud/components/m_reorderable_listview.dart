@@ -709,24 +709,7 @@ class _ReorderableListContentState extends State<_ReorderableListContent> with T
         ]
       );
 
-/*
-      return Stack(
-        children:<Widget>[
-          Scrollbar(
-            child: SingleChildScrollView(
-              scrollDirection: widget.scrollDirection,
-              padding: widget.padding,
-              controller: _scrollController,
-              reverse: widget.reverse,
-              child: _buildContainerForScrollDirection(
-                children: cards,
-              ),
-            )
-          ),
-          widget.header != null? widget.header: Container(height: 0,),
-        ]
-      );
-      */
+
     });
   }
 }
