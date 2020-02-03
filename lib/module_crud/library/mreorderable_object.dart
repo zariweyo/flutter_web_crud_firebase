@@ -10,7 +10,7 @@ abstract class MReorderableObject{
   String reorderableTitle();
   IconData reorderableIcon();
   String reorderableId();
-  Future<bool> isDeleteable();
+  Future<bool> reorderableDeleteable();
   void reorderableNewPriority(int length);
 
 
