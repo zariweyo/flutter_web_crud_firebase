@@ -203,4 +203,9 @@ class MFile implements MTableable,MEditableGroupObject{
     }
   }
 
+  @override
+  Map<String, String> getReflectionTranslates() {
+    return Map<String, String>();
+  }
+
 }

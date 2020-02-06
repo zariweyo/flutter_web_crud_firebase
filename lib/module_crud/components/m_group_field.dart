@@ -24,7 +24,12 @@ class MGroupField extends StatelessWidget{
 
   _getAtributesEditableWidgets(){
     List<Widget> widgets = new List<Widget>();
-    mEditableGroupObject.getReflectionAttributes().forEach((_attrName,_attrValue){
+    mEditableGroupObject.getReflectionAttributes().forEach((_attrNameDef,_attrValue){
+      String _attrName = mEditableGroupObject.getReflectionTranslates()[_attrNameDef];
+      if(_attrName==null || _attrName==""){
+        _attrName = _attrNameDef;
+      }
+
       if(_attrValue is MEditableGroupFieldList){
         MEditableGroupFieldList _itemsEditable = _attrValue;
 
@@ -203,6 +208,9 @@ class MGroupField extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    if(mEditableGroupObject==null){
+      return MEmpty();
+    }
     _extended = mEditableGroupObject.getReflectionExtended(parentAttributeName: parentAttributeName, actual:actualExtended);
     if(_extended!=null && _extended.grid>1){
       List<Widget> widgets = new List<Widget>();
