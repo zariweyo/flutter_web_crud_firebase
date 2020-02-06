@@ -50,7 +50,7 @@ class MGroupField extends StatelessWidget{
             selected: _itemsEditable.selected,
             title: _attrName,
             onChanged: (_newValue){
-              _setReflectionValue(_attrName,_newValue);
+              _setReflectionValue(_attrNameDef,_newValue);
             },
           )
 
@@ -63,11 +63,11 @@ class MGroupField extends StatelessWidget{
             value: _attrValue.toString(),
             onChanged: (_newValue){
               if(_attrValue is MDouble || _attrValue is double){
-                _setReflectionValue(_attrName,double.parse(_newValue));
+                _setReflectionValue(_attrNameDef,double.parse(_newValue));
               }else if(_attrValue is int){
-                _setReflectionValue(_attrName,int.parse(_newValue));
+                _setReflectionValue(_attrNameDef,int.parse(_newValue));
               }else{
-                _setReflectionValue(_attrName,_newValue);
+                _setReflectionValue(_attrNameDef,_newValue);
               }
               
             },
@@ -98,11 +98,11 @@ class MGroupField extends StatelessWidget{
             value: _attrValue.toString(),
             onChanged: (_newValue){
               if(_attrValue is MDouble || _attrValue is double){
-                _setReflectionValue(_attrName,double.parse(_newValue));
+                _setReflectionValue(_attrNameDef,double.parse(_newValue));
               }else if(_attrValue is int){
-                _setReflectionValue(_attrName,int.parse(_newValue));
+                _setReflectionValue(_attrNameDef,int.parse(_newValue));
               }else{
-                _setReflectionValue(_attrName,_newValue);
+                _setReflectionValue(_attrNameDef,_newValue);
               }
               
             },
@@ -114,7 +114,7 @@ class MGroupField extends StatelessWidget{
             title: _attrName,
             value: _attrValue,
             onChanged: (_newValue){
-              _setReflectionValue(_attrName,_newValue);
+              _setReflectionValue(_attrNameDef,_newValue);
             },
           )
         );
@@ -155,7 +155,12 @@ class MGroupField extends StatelessWidget{
         
       }else{
         
-        if(_extended!=null && _extended.groups!=null && _extended.groups[_attrName]!=null){
+        if(_extended!=null && _extended.groups!=null && _extended.groups[_attrNameDef]!=null){
+          String _headText = mEditableGroupObject.getReflectionTranslates()[_extended.groups[_attrNameDef]];
+          if(_headText==null){
+            _headText = _extended.groups[_attrNameDef];
+          }
+
           widgets.add(
             Container(
               padding:EdgeInsets.only(left: 10),
@@ -167,7 +172,7 @@ class MGroupField extends StatelessWidget{
               child:Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:[
-                  Text(_extended.groups[_attrName]),
+                  Text(_headText),
                   MGroupField(
                     actualExtended:_extended,
                     parentAttributeName: _attrName,
@@ -176,7 +181,7 @@ class MGroupField extends StatelessWidget{
                       if(onError!=null) onError(_genError);
                     },
                     onSetReflectionValue: (_newAttrName,_newAttrValue){
-                      _setReflectionValue(_attrName,_newAttrValue);
+                      _setReflectionValue(_attrNameDef,_newAttrValue);
                     },
                   )
                 ]
@@ -194,7 +199,7 @@ class MGroupField extends StatelessWidget{
                 if(onError!=null) onError(_genError);
               },
               onSetReflectionValue: (_newAttrName,_newAttrValue){
-                _setReflectionValue(_attrName,_newAttrValue);
+                _setReflectionValue(_attrNameDef,_newAttrValue);
               },
             )
           );
