@@ -28,6 +28,7 @@ class MTableManage extends StatefulWidget{
   Color checkboxColor;
   Color backgroundColor;
   Color borderColor;
+  Color textColor;
   String hintSearch;
   
 
@@ -41,6 +42,7 @@ class MTableManage extends StatefulWidget{
     this.customIconColor = Colors.white,
     this.checkboxColor = Colors.green,
     this.backgroundColor = Colors.white,
+    this.textColor = Colors.black,
     this.borderColor = Colors.black,
     this.hintSearch = "Search",
 
@@ -269,7 +271,12 @@ class _MTableManageState extends State<MTableManage>{
              flex:6,
              child: Container(
                padding: EdgeInsets.only(left: 20),
-               child:Text(_item.getTitle()),
+               child:Text(
+                 _item.getTitle(),
+                 style:TextStyle(
+                   color:widget.textColor
+                 )
+               ),
              )
           )
       );
@@ -284,6 +291,9 @@ class _MTableManageState extends State<MTableManage>{
                child:Text(
                 _item.getDescription(),
                 textAlign: TextAlign.right,
+                style:TextStyle(
+                   color:widget.textColor
+                 )
                ),
              )
                
@@ -330,6 +340,10 @@ class _MTableManageState extends State<MTableManage>{
                child:Text(
                  _mhead.title,
                  textAlign: TextAlign.center,
+                 style:TextStyle(
+                   color:widget.textColor,
+                   fontWeight: FontWeight.bold
+                 )
                 ),
              )
                
