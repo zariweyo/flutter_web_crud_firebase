@@ -18,7 +18,7 @@ class EditMFile extends StatelessWidget{
         child: MGroupField(
           mEditableGroupObject: file,
           onError: (_genError){
-            UtilMessages.showErrorDialog(context, _genError.message);
+            MUtilMessages.showErrorDialog(context, _genError.message);
           },
         )
       )

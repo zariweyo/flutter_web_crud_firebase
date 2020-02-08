@@ -99,7 +99,7 @@ class _MTableManageState extends State<MTableManage>{
               child: IconButton(
                 icon: Icon(Icons.delete, color: widget.deleteIconColor),
                 onPressed: (){
-                  UtilMessages.showConfirmDialog(context, widget.titleDelete,  widget.messageDelete,
+                  MUtilMessages.showConfirmDialog(context, widget.titleDelete,  widget.messageDelete,
                     onAccept: (_context){
                       setState(() {
                         deleting.add(_item.getId());

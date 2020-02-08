@@ -12,4 +12,9 @@ export 'module_crud/components/m_group_field.dart';
 export 'module_crud/components/m_reorderable_cards.dart';
 export 'module_crud/components/crud_card.dart';
 
+export 'module_crud/components/m_text_field.dart';
+export 'module_crud/messages/messages.dart';
+export 'module_crud/library/m_file.dart';
+
+
 

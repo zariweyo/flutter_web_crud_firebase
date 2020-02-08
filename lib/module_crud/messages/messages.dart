@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_crud_firebase/module_crud/index.dart';
 
 
-class UtilMessages
+class MUtilMessages
 {
   static showInfoDialog(BuildContext _context, String title, String infoMessage,{VoidCallback onFinish}) {
     showDialog(
