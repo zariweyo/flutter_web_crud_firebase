@@ -41,6 +41,12 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
     super.initState();
   }
 
+  @override
+  didUpdateWidget(MFileUploadManage oldWidget){
+    _startFilePicker();
+    super.didUpdateWidget(oldWidget);
+  }
+
   _getStringTypes(){
     switch(widget.type){
       case MFileUploadManageType.IMAGE:
@@ -82,6 +88,7 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
     final reader = new FileReader();
 
     reader.onLoadEnd.listen((e) {
+      
       if(widget.size>=0 && e.total>widget.size){
         if(widget.onError!=null){
           widget.onError(GenericError(
@@ -91,6 +98,7 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
           ));
         }
       }else{
+        
         Mfunctions.uploadFile(reader.result, widget.path,onChangePercent: _handlePercent).then((_uploaded){
           if(_uploaded){
             if(widget.onComplete!=null) widget.onComplete();
