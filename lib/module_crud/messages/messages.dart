@@ -23,6 +23,25 @@ class MUtilMessages
     );
   }
 
+  static showColorDialog(BuildContext _context, String title, Color value,{VoidCallback onFinish, Function(Color) onChange}) {
+    showDialog(
+      context: _context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return new MColorMessage(
+          title: title,
+          value: value,
+          onChange: onChange,
+          onPressed: () {
+            if(onFinish!=null) onFinish();
+            Navigator.of(context).pop();
+          }
+
+        );
+      },
+    );
+  }
+
   static showConfirmDialog(BuildContext _context, String title, String confirmationMessage,{Function(BuildContext) onAccept, Function(BuildContext) onDeny}) {
     if(_context==null){
       return;

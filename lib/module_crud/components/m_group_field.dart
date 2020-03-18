@@ -119,6 +119,17 @@ class MGroupField extends StatelessWidget{
           )
         );
       
+      }else if(_attrValue is Color){
+        widgets.add(
+          MColorField(
+            title: _attrName,
+            value: _attrValue,
+            onChanged: (_newValue){
+              _setReflectionValue(_attrNameDef,_newValue);
+            },
+          )
+        );
+      
       }else if(_attrValue is Uri){
         Uri _image = _attrValue;
         widgets.add(
