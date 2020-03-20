@@ -567,6 +567,7 @@ class _TextFieldBISState extends State<TextFieldBIS> implements TextSelectionGes
         break;
     }
 
+    
     Widget child = RepaintBoundary(
       child: EditableText(
         key: editableTextKey,
@@ -611,7 +612,7 @@ class _TextFieldBISState extends State<TextFieldBIS> implements TextSelectionGes
         enableInteractiveSelection: widget.enableInteractiveSelection,
         dragStartBehavior: widget.dragStartBehavior,
         scrollController: widget.scrollController,
-        scrollPhysics: widget.scrollPhysics,
+        scrollPhysics: widget.scrollPhysics
       ),
     );
 

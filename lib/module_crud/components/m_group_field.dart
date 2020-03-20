@@ -10,7 +10,9 @@ class MGroupField extends StatelessWidget{
   Function(GenericError) onError;
   String parentAttributeName;
 
-  MGroupField({@required this.mEditableGroupObject,this.onSetReflectionValue,this.onError,this.actualExtended,this.parentAttributeName=""});
+  MGroupField({@required this.mEditableGroupObject,this.onSetReflectionValue,this.onError,this.actualExtended,this.parentAttributeName=""}){
+    EditableText.debugDeterministicCursor = true;
+  }
 
   _setReflectionValue(String attrName, dynamic attrValue){
     mEditableGroupObject.setReflectionValue(attrName,attrValue);

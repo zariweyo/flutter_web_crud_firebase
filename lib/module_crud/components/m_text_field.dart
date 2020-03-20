@@ -17,6 +17,8 @@ class MTextField extends StatelessWidget{
   MTextField({this.onChanged,this.hintText="",this.obscureText=false, this.inputFormatters, this.onPressEnter, this.icon=Icons.input, this.value, this.keyboardType=TextInputType.text, this.enabled=true}){
     _controller=new TextEditingController();
     _controller.text = value;
+    _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
+    
     if(inputFormatters==null){
       inputFormatters=[];
     }
