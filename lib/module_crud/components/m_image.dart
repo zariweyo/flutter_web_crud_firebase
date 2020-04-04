@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase/firebase.dart' as Firebase;
+import 'package:flutter_web_crud_firebase/module_canvaskit/index.dart';
 import 'package:flutter_web_crud_firebase/module_crud/index.dart';
 
 
@@ -75,8 +76,8 @@ class _MImageState extends State<MImage>{
       return Container(
         width: widget.width,
         height: widget.height,
-        child:Image.network(
-          _imagePath, 
+        child:CKNetworkImage(
+          src:_imagePath, 
           key:ValueKey(_key),
           width: widget.width, 
           height: widget.height,)
