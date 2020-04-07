@@ -53,7 +53,7 @@ class MTextArea extends StatelessWidget{
 
         enabled: enabled,
         minLines: minLines,
-        maxLines: null,
+        maxLines: maxLines,
         controller: _textEditingController,
         onChanged: onChanged,
         enableInteractiveSelection: true,
