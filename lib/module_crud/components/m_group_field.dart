@@ -57,7 +57,7 @@ class MGroupField extends StatelessWidget{
           )
 
         );
-      }else if(_attrValue is String && _extended!=null && _extended.types[_attrName]!=null && _extended.types[_attrName]==MEditableGroupFieldExtendedType.TEXTAREA){
+      }else if(_attrValue is String && _extended!=null && _extended.types[_attrNameDef]!=null && _extended.types[_attrNameDef]==MEditableGroupFieldExtendedType.TEXTAREA){
       
         widgets.add(
           MTextArea(
@@ -188,7 +188,7 @@ class MGroupField extends StatelessWidget{
                   Text(_headText),
                   MGroupField(
                     actualExtended:_extended,
-                    parentAttributeName: _attrName,
+                    parentAttributeName: _attrNameDef,
                     mEditableGroupObject: _attrValue,
                     onError: (_genError){
                       if(onError!=null) onError(_genError);
@@ -207,7 +207,7 @@ class MGroupField extends StatelessWidget{
             MGroupField(
               mEditableGroupObject: _attrValue,
               actualExtended:_extended,
-              parentAttributeName: _attrName,
+              parentAttributeName: _attrNameDef,
               onError: (_genError){
                 if(onError!=null) onError(_genError);
               },
