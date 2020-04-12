@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:firebase/firebase.dart' as Firebase;
+//import 'package:firebase/firebase.dart' as Firebase;
 import 'package:flutter_web_crud_firebase/module_crud/index.dart';
 import 'package:uuid/uuid.dart';
 
@@ -10,10 +10,12 @@ class Mfunctions{
     return uuid.v4();
   }
 
+/*
   static Future<dynamic> deleteFile(String path) {
     return Firebase.storage().ref(path).delete();
 
   }
+*/
 
   static bool imageIsCDN(Uri uri){
     if(!uri.hasScheme){
@@ -22,6 +24,7 @@ class Mfunctions{
     return uri.scheme.substring(0,4).toLowerCase()=="http";
   }
 
+/*
   static Future<bool> uploadFile(String blob,String path,{Function(int) onChangePercent}) {
     Completer completer = new Completer<bool>();
     Firebase.UploadTask _uploadTask = Firebase.storage().ref(path).putString(blob,'data_url');
@@ -52,6 +55,7 @@ class Mfunctions{
 
     return completer.future;
   }
+*/
 
   static String prettyTime(Duration _dur){
     String res = "";
@@ -63,6 +67,7 @@ class Mfunctions{
     return res;
   }
   
+  /*
   static Future<String> pathFileLoadFromStorage(Firebase.StorageReference imageReference,{ bool cached=true }) {
     Completer completer = new Completer<String>();
     if(imageReference.fullPath==""){
@@ -88,4 +93,5 @@ class Mfunctions{
     //}
     return completer.future;
   }
+  */
 }

@@ -11,7 +11,8 @@ class MGroupField extends StatelessWidget{
   String parentAttributeName;
 
   MGroupField({@required this.mEditableGroupObject,this.onSetReflectionValue,this.onError,this.actualExtended,this.parentAttributeName=""}){
-    EditableText.debugDeterministicCursor = true;
+    //If true, textfield cursos blink will be disabled
+    //EditableText.debugDeterministicCursor = true;
   }
 
   _setReflectionValue(String attrName, dynamic attrValue){

@@ -55,7 +55,7 @@ class _McheckFieldState extends State<McheckField>{
           ),
           Container(
             margin: EdgeInsets.only(left:20),
-            width: MediaQuery.of(context).size.width/10,
+            width: MediaQuery.of(context).size.width/4,
             child: Switch(
               onChanged: widget.enabled?_onChanged:null,
               value: enabled,

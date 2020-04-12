@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase/firebase.dart' as Firebase;
+//import 'package:firebase/firebase.dart' as Firebase;
 import 'package:flutter_web_crud_firebase/module_canvaskit/index.dart';
 import 'package:flutter_web_crud_firebase/module_crud/index.dart';
 
@@ -47,6 +47,7 @@ class _MImageState extends State<MImage>{
     //  return;
     //}
     errorLoad = false;
+    /*
     if(!Mfunctions.imageIsCDN(widget.image)){
         Firebase.StorageReference _storageRef = Firebase.storage().ref(widget.image.toString());
         Mfunctions.pathFileLoadFromStorage(_storageRef,cached: widget.cached).then((_pathImageResolved){
@@ -63,6 +64,7 @@ class _MImageState extends State<MImage>{
     }else{
       _imagePath = widget.image.toString();
     }
+    */
   }
 
   Widget _printImage(){

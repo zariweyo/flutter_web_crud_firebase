@@ -1,4 +1,6 @@
-//import 'dart:html';
+/* ONLY WEB
+
+import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_crud_firebase/module_crud/index.dart';
@@ -32,7 +34,7 @@ class MFileUploadManage extends StatefulWidget{
 
 class _MFileUploadManageState extends State<MFileUploadManage>{
 
-  //InputElement uploadInput;
+  InputElement uploadInput;
   int percent=100;
 
   @override
@@ -50,13 +52,13 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
   _getStringTypes(){
     switch(widget.type){
       case MFileUploadManageType.IMAGE:
-        return "image/*";
+        return "image/ *";
         break;
       case MFileUploadManageType.AUDIO:
-        return "audio/*";
+        return "audio/ *";
         break;
       case MFileUploadManageType.VIDEO:
-        return "video/*";
+        return "video/ *";
         break;
       case MFileUploadManageType.PDF:
         return "application/pdf";
@@ -68,7 +70,6 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
   }
 
   _delete(){
-    /*
     Mfunctions.deleteFile(widget.path).then((_){
       if(widget.onComplete!=null) widget.onComplete();
     }).catchError((err){
@@ -80,12 +81,10 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
             )
           );
     });
-    */
   }
 
 
   _startFilePicker(){
-    /*
     uploadInput = FileUploadInputElement();
     uploadInput.accept = _getStringTypes();
     final reader = new FileReader();
@@ -133,7 +132,6 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
         reader.readAsDataUrl(file);
       }
     });
-    */
   }
 
   _handlePercent(int _percent){
@@ -168,7 +166,7 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
           FlatButton(
             child:widget.uploadContainer,
             onPressed: (){
-              //uploadInput.click();
+              uploadInput.click();
             },
           ),
           FlatButton(
@@ -185,3 +183,4 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
 
 }
 
+*/

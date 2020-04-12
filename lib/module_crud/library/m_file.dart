@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_crud_firebase/module_crud/index.dart';
-import 'package:firebase/firebase.dart' as Firebase;
+//import 'package:firebase/firebase.dart' as Firebase;
 
 enum MFileType{
   EMPTY,
@@ -44,6 +44,7 @@ class MFile implements MTableable,MEditableGroupObject{
       return completer.future;
     }
     
+    /*
     Firebase.StorageReference _storageRef = Firebase.storage().ref(path);
     Mfunctions.pathFileLoadFromStorage(_storageRef,cached: cached).then((_pathImageResolved){
       
@@ -57,6 +58,7 @@ class MFile implements MTableable,MEditableGroupObject{
     .catchError((err){
       completer.completeError(err);
     });
+    */
 
     return completer.future;
   }
