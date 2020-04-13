@@ -10,6 +10,26 @@ class Mfunctions{
     return uuid.v4();
   }
 
+  static String getStringTypes(MFileUploadManageType type){
+    switch(type){
+      case MFileUploadManageType.IMAGE:
+        return "image/*";
+        break;
+      case MFileUploadManageType.AUDIO:
+        return "audio/*";
+        break;
+      case MFileUploadManageType.VIDEO:
+        return "video/*";
+        break;
+      case MFileUploadManageType.PDF:
+        return "application/pdf";
+        break;
+      case MFileUploadManageType.ALL:
+      default:
+        return "*";
+    }
+  }
+
 /*
   static Future<dynamic> deleteFile(String path) {
     return Firebase.storage().ref(path).delete();
@@ -60,8 +80,8 @@ class Mfunctions{
   static String prettyTime(Duration _dur){
     String res = "";
     if(_dur.inHours>0) res += _dur.inHours.toString() +":";
-    if(_dur.inMinutes>0) res += (_dur.inMinutes%60).toString() +":";
-    res += (_dur.inSeconds%60).toString() +".";
+    if(_dur.inMinutes>0) res += ((_dur.inMinutes%60)<10?"0":"") + (_dur.inMinutes%60).toString() +":";
+    res += ((_dur.inSeconds%60)<10?"0":"") + (_dur.inSeconds%60).toString() +".";
     res += (_dur.inMilliseconds%1000).toString();
 
     return res;

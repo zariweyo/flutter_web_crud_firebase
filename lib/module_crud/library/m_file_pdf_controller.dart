@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_crud_firebase/module_crud/index.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../module_filehandle/base/filehandle_controller.dart';
 
 class MFilePDFController extends MFileController{
   
@@ -38,15 +39,14 @@ class MFilePDFController extends MFileController{
   }
 
   _download(){
-    /*
-    Firebase.StorageReference _storageRef = Firebase.storage().ref(file.path);
-    Mfunctions.pathFileLoadFromStorage(_storageRef,cached: false).then((_pathResolved){
+
+    Uri _filePath = Uri.parse(file.path);
+    FileHandleController fileHandleController = new FileHandleController();
+    fileHandleController.loadImage(_filePath).then((_pathResolved){
       _launchURL(_pathResolved);
-    })
-    .catchError((err){
+    }).catchError((err){
       
     });
-    */
   }
 
   @override

@@ -1,8 +1,8 @@
-//import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_crud_firebase/module_crud/index.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import '../../module_filehandle/base/filehandle_controller.dart';
 
 enum MFileUploadManageType{
   ALL,
@@ -22,8 +22,16 @@ class MFileUploadManage extends StatefulWidget{
   Widget deleteContainer;
   bool showPercent;
 
-  MFileUploadManage({@required this.path, @required this.uploadContainer,@required this.deleteContainer, this.onComplete, this.showPercent=true,
-    this.type = MFileUploadManageType.ALL, this.size=-1, this.onError});
+  MFileUploadManage({
+    @required this.path, 
+    @required this.uploadContainer,
+    @required this.deleteContainer, 
+    this.onComplete, 
+    this.showPercent=true,
+    this.type = MFileUploadManageType.ALL, 
+    this.size=-1, 
+    this.onError
+  });
 
   @override
   _MFileUploadManageState createState() => _MFileUploadManageState();
@@ -34,9 +42,11 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
 
   //InputElement uploadInput;
   int percent=100;
+  FileHandleController fileHandleController;
 
   @override
   initState(){
+    fileHandleController = new FileHandleController();
     _startFilePicker();
     super.initState();
   }
@@ -47,93 +57,32 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
     super.didUpdateWidget(oldWidget);
   }
 
-  _getStringTypes(){
-    switch(widget.type){
-      case MFileUploadManageType.IMAGE:
-        return "image/*";
-        break;
-      case MFileUploadManageType.AUDIO:
-        return "audio/*";
-        break;
-      case MFileUploadManageType.VIDEO:
-        return "video/*";
-        break;
-      case MFileUploadManageType.PDF:
-        return "application/pdf";
-        break;
-      case MFileUploadManageType.ALL:
-      default:
-        return "*";
-    }
-  }
+  
 
   _delete(){
-    /*
-    Mfunctions.deleteFile(widget.path).then((_){
+    fileHandleController.deleteFile(widget.path).then((value){
       if(widget.onComplete!=null) widget.onComplete();
     }).catchError((err){
-          if(widget.onError!=null) widget.onError(
-            GenericError(
-                code: "DELETE_001",
-                message: "Delete_file_error",
-                origin: MFileUploadManage
-            )
-          );
+      if(widget.onError!=null) widget.onError(
+        GenericError(
+            code: "DELETE_001",
+            message: "Delete_file_error",
+            origin: MFileUploadManage
+        )
+      );
     });
-    */
   }
 
 
   _startFilePicker(){
-    /*
-    uploadInput = FileUploadInputElement();
-    uploadInput.accept = _getStringTypes();
-    final reader = new FileReader();
-
-    reader.onLoadEnd.listen((e) {
-      
-      if(widget.size>=0 && e.total>widget.size){
-        if(widget.onError!=null){
-          widget.onError(GenericError(
-            code: "UPLOAD_001",
-            message: "Max_size_upload_exceded",
-            origin: MFileUploadManage
-          ));
-        }
-      }else{
-        
-        Mfunctions.uploadFile(reader.result, widget.path,onChangePercent: _handlePercent).then((_uploaded){
-          if(_uploaded){
-            if(widget.onComplete!=null) widget.onComplete();
-          }else{
-            if(widget.onError!=null) widget.onError(
-              GenericError(
-                code: "UPLOAD_002",
-                message: "Upload_failed",
-                origin: MFileUploadManage
-              )
-            );
-          }
-        }).catchError((err){
-          if(widget.onError!=null) widget.onError(
-            GenericError(
-                code: "UPLOAD_003",
-                message: "Upload_error",
-                origin: MFileUploadManage
-            )
-          );
-        });
-      }
-    });
-
-    uploadInput.onChange.listen((e) {
-      final files = uploadInput.files;
-      if (files.length == 1) {
-        final file = files[0];
-        reader.readAsDataUrl(file);
-      }
-    });
-    */
+    fileHandleController.loadFilePicker(
+      path: widget.path, 
+      type: widget.type, 
+      size: widget.size, 
+      handlePercent: _handlePercent,
+      onComplete: widget.onComplete,
+      onError: widget.onError
+    );
   }
 
   _handlePercent(int _percent){
@@ -168,7 +117,7 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
           FlatButton(
             child:widget.uploadContainer,
             onPressed: (){
-              //uploadInput.click();
+              fileHandleController.callFilePicker();
             },
           ),
           FlatButton(
