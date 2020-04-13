@@ -212,9 +212,9 @@ class _MReorderableCardsState extends State<MReorderableCards> {
           iconSize: 30,
           onPressed: (){
             print("DEL " + _objectSelected.reorderableTitle());
-            _objectSelected.isDeleteable().then((_isDeleteable){
+            _objectSelected.reorderableDeleteable().then((_isDeleteable){
               if(_isDeleteable){
-                UtilMessages.showConfirmDialog(context, widget.deleteTitleMessage, 
+                MUtilMessages.showConfirmDialog(context, widget.deleteTitleMessage, 
                   widget.deleteBodyMessage
                   ,onAccept: (_context){
                     if(widget.onDelete!=null) widget.onDelete(_objectSelected);
@@ -226,7 +226,7 @@ class _MReorderableCardsState extends State<MReorderableCards> {
                   }
                 );
               }else{
-                UtilMessages.showInfoDialog(context, widget.notEmptyTitleMessage, 
+                MUtilMessages.showInfoDialog(context, widget.notEmptyTitleMessage, 
                   widget.notEmptyBodyMessage
                 );
               }

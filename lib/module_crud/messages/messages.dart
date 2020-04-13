@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_crud_firebase/module_crud/index.dart';
 
 
-class UtilMessages
+class MUtilMessages
 {
   static showInfoDialog(BuildContext _context, String title, String infoMessage,{VoidCallback onFinish}) {
     showDialog(
@@ -13,6 +13,25 @@ class UtilMessages
         return new MInfoMessage(
           title: title,
           infoMessage: infoMessage,
+          onPressed: () {
+            if(onFinish!=null) onFinish();
+            Navigator.of(context).pop();
+          }
+
+        );
+      },
+    );
+  }
+
+  static showColorDialog(BuildContext _context, String title, Color value,{VoidCallback onFinish, Function(Color) onChange}) {
+    showDialog(
+      context: _context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return new MColorMessage(
+          title: title,
+          value: value,
+          onChange: onChange,
           onPressed: () {
             if(onFinish!=null) onFinish();
             Navigator.of(context).pop();

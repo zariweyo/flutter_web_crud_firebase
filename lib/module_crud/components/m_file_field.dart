@@ -43,6 +43,9 @@ class _MFileFieldState extends State<MFileField>{
       case MFileType.IMAGE:
         controller = new MFileImageController(_file);
         break;
+      case MFileType.PDF:
+        controller = new MFilePDFController(_file);
+        break;
       default:
     }
 

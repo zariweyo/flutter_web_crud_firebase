@@ -4,6 +4,10 @@ abstract class MEditableGroupObject{
   Map<String,dynamic> getReflectionAttributes();
   MEditableGroupFieldExtended getReflectionExtended({String parentAttributeName, MEditableGroupFieldExtended actual});
   void setReflectionValue(String attributeName,dynamic attributeValue);
+
+  Map<String,String> getReflectionTranslates(){
+    return new Map<String,String>();
+  }
 }
 
 enum MEditableGroupFieldExtendedType{

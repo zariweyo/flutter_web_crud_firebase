@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_crud_firebase/module_crud/index.dart';
-import 'package:firebase/firebase.dart' as Firebase;
+import '../../module_filehandle/base/filehandle_controller.dart';
 
 enum MFileType{
   EMPTY,
@@ -43,18 +43,17 @@ class MFile implements MTableable,MEditableGroupObject{
       completer.complete(true);
       return completer.future;
     }
-    
-    Firebase.StorageReference _storageRef = Firebase.storage().ref(path);
-    Mfunctions.pathFileLoadFromStorage(_storageRef,cached: cached).then((_pathImageResolved){
-      
-      if(_pathImageResolved!=null && _pathImageResolved!=""){
-        file = Uri.parse(_pathImageResolved);
+
+    Uri _filePath = Uri.parse(path);
+    FileHandleController fileHandleController = new FileHandleController();
+    fileHandleController.loadImage(_filePath).then((_imagePathResolved){
+      if(_imagePathResolved!=null && _imagePathResolved!=""){
+        file = Uri.parse(_imagePathResolved);
         completer.complete(true);
       }else{
         completer.complete(false);
       }
-    })
-    .catchError((err){
+    }).catchError((err){
       completer.completeError(err);
     });
 
@@ -201,6 +200,11 @@ class MFile implements MTableable,MEditableGroupObject{
         file=attributeValue;
         break;
     }
+  }
+
+  @override
+  Map<String, String> getReflectionTranslates() {
+    return Map<String, String>();
   }
 
 }

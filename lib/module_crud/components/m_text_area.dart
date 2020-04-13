@@ -46,14 +46,14 @@ class MTextArea extends StatelessWidget{
   }
 
   _printTextField(){
-    return TextFieldBIS(
+    return TextField(
         textAlign: TextAlign.left,
         textAlignVertical: TextAlignVertical.top,
         keyboardType: TextInputType.multiline,
 
         enabled: enabled,
         minLines: minLines,
-        maxLines: null,
+        maxLines: maxLines,
         controller: _textEditingController,
         onChanged: onChanged,
         enableInteractiveSelection: true,

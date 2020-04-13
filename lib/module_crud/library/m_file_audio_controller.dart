@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_crud_firebase/module_crud/index.dart';
+import '../../module_filehandle/audio/fileaudio_controller.dart';
 
 class MFileAudioController extends MFileController{
   
-  AudioElement _audio;
+  FileAudioController fileAudioController;
   bool isPlaying=false;
 
   MFileAudioController(MFile file):super(file);
@@ -14,13 +14,13 @@ class MFileAudioController extends MFileController{
   Future<bool> load() {
     Completer completer = new Completer<bool>();
     file.loadFile().then((_res){
-      print(file.file.toString());
-      _audio = new AudioElement(file.file.toString());
-      _audio.onLoadedData.listen((_meta){
-        completer.complete(true);
-      }).onError((err){
+      fileAudioController = new FileAudioController(file.file.toString());
+      fileAudioController.onLoaded().then((_loaded){
+        completer.complete(_loaded);
+      }).catchError((err){
         completer.completeError(err);
       });
+
     }).catchError((err){
       completer.completeError(err);
     });
@@ -30,8 +30,9 @@ class MFileAudioController extends MFileController{
 
   @override
   dispose(){
-    if(_audio!=null){
-      _audio.pause();
+
+    if(fileAudioController!=null){
+      fileAudioController.destroy();
     }
     super.dispose();
   }
@@ -40,7 +41,7 @@ class MFileAudioController extends MFileController{
 
   @override
   Widget toWidget() {
-    if(_audio==null){
+    if(fileAudioController==null){
       return MEmpty();
     }
 
@@ -51,18 +52,18 @@ class MFileAudioController extends MFileController{
             isPlaying?Icons.pause:Icons.play_arrow,
             color: Colors.white,
           ),
-              Text(Mfunctions.prettyTime(Duration(seconds:_audio.duration.toInt())))
+          Text(Mfunctions.prettyTime(Duration(seconds:fileAudioController.getSeconds())))
         ]
       ),
       onPressed: (){
         if(isPlaying){
           
           isPlaying=false;
-          _audio.pause();
+          fileAudioController.pause();
           changeState.add(true);
         }else{
           isPlaying=true;
-          _audio.play();
+          fileAudioController.play();
           changeState.add(true);
         }
       },

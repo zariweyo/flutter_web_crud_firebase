@@ -10,7 +10,10 @@ class MGroupField extends StatelessWidget{
   Function(GenericError) onError;
   String parentAttributeName;
 
-  MGroupField({@required this.mEditableGroupObject,this.onSetReflectionValue,this.onError,this.actualExtended,this.parentAttributeName=""});
+  MGroupField({@required this.mEditableGroupObject,this.onSetReflectionValue,this.onError,this.actualExtended,this.parentAttributeName=""}){
+    //If true, textfield cursos blink will be disabled
+    //EditableText.debugDeterministicCursor = true;
+  }
 
   _setReflectionValue(String attrName, dynamic attrValue){
     mEditableGroupObject.setReflectionValue(attrName,attrValue);
@@ -24,7 +27,12 @@ class MGroupField extends StatelessWidget{
 
   _getAtributesEditableWidgets(){
     List<Widget> widgets = new List<Widget>();
-    mEditableGroupObject.getReflectionAttributes().forEach((_attrName,_attrValue){
+    mEditableGroupObject.getReflectionAttributes().forEach((_attrNameDef,_attrValue){
+      String _attrName = mEditableGroupObject.getReflectionTranslates()[_attrNameDef];
+      if(_attrName==null || _attrName==""){
+        _attrName = _attrNameDef;
+      }
+
       if(_attrValue is MEditableGroupFieldList){
         MEditableGroupFieldList _itemsEditable = _attrValue;
 
@@ -45,12 +53,12 @@ class MGroupField extends StatelessWidget{
             selected: _itemsEditable.selected,
             title: _attrName,
             onChanged: (_newValue){
-              _setReflectionValue(_attrName,_newValue);
+              _setReflectionValue(_attrNameDef,_newValue);
             },
           )
 
         );
-      }else if(_attrValue is String && _extended!=null && _extended.types[_attrName]!=null && _extended.types[_attrName]==MEditableGroupFieldExtendedType.TEXTAREA){
+      }else if(_attrValue is String && _extended!=null && _extended.types[_attrNameDef]!=null && _extended.types[_attrNameDef]==MEditableGroupFieldExtendedType.TEXTAREA){
       
         widgets.add(
           MTextArea(
@@ -58,11 +66,11 @@ class MGroupField extends StatelessWidget{
             value: _attrValue.toString(),
             onChanged: (_newValue){
               if(_attrValue is MDouble || _attrValue is double){
-                _setReflectionValue(_attrName,double.parse(_newValue));
+                _setReflectionValue(_attrNameDef,double.parse(_newValue));
               }else if(_attrValue is int){
-                _setReflectionValue(_attrName,int.parse(_newValue));
+                _setReflectionValue(_attrNameDef,int.parse(_newValue));
               }else{
-                _setReflectionValue(_attrName,_newValue);
+                _setReflectionValue(_attrNameDef,_newValue);
               }
               
             },
@@ -93,11 +101,11 @@ class MGroupField extends StatelessWidget{
             value: _attrValue.toString(),
             onChanged: (_newValue){
               if(_attrValue is MDouble || _attrValue is double){
-                _setReflectionValue(_attrName,double.parse(_newValue));
+                _setReflectionValue(_attrNameDef,double.parse(_newValue));
               }else if(_attrValue is int){
-                _setReflectionValue(_attrName,int.parse(_newValue));
+                _setReflectionValue(_attrNameDef,int.parse(_newValue));
               }else{
-                _setReflectionValue(_attrName,_newValue);
+                _setReflectionValue(_attrNameDef,_newValue);
               }
               
             },
@@ -109,7 +117,18 @@ class MGroupField extends StatelessWidget{
             title: _attrName,
             value: _attrValue,
             onChanged: (_newValue){
-              _setReflectionValue(_attrName,_newValue);
+              _setReflectionValue(_attrNameDef,_newValue);
+            },
+          )
+        );
+      
+      }else if(_attrValue is Color){
+        widgets.add(
+          MColorField(
+            title: _attrName,
+            value: _attrValue,
+            onChanged: (_newValue){
+              _setReflectionValue(_attrNameDef,_newValue);
             },
           )
         );
@@ -150,7 +169,12 @@ class MGroupField extends StatelessWidget{
         
       }else{
         
-        if(_extended!=null && _extended.groups!=null && _extended.groups[_attrName]!=null){
+        if(_extended!=null && _extended.groups!=null && _extended.groups[_attrNameDef]!=null){
+          String _headText = mEditableGroupObject.getReflectionTranslates()[_extended.groups[_attrNameDef]];
+          if(_headText==null){
+            _headText = _extended.groups[_attrNameDef];
+          }
+
           widgets.add(
             Container(
               padding:EdgeInsets.only(left: 10),
@@ -162,16 +186,16 @@ class MGroupField extends StatelessWidget{
               child:Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:[
-                  Text(_extended.groups[_attrName]),
+                  Text(_headText),
                   MGroupField(
                     actualExtended:_extended,
-                    parentAttributeName: _attrName,
+                    parentAttributeName: _attrNameDef,
                     mEditableGroupObject: _attrValue,
                     onError: (_genError){
                       if(onError!=null) onError(_genError);
                     },
                     onSetReflectionValue: (_newAttrName,_newAttrValue){
-                      _setReflectionValue(_attrName,_newAttrValue);
+                      _setReflectionValue(_attrNameDef,_newAttrValue);
                     },
                   )
                 ]
@@ -184,12 +208,12 @@ class MGroupField extends StatelessWidget{
             MGroupField(
               mEditableGroupObject: _attrValue,
               actualExtended:_extended,
-              parentAttributeName: _attrName,
+              parentAttributeName: _attrNameDef,
               onError: (_genError){
                 if(onError!=null) onError(_genError);
               },
               onSetReflectionValue: (_newAttrName,_newAttrValue){
-                _setReflectionValue(_attrName,_newAttrValue);
+                _setReflectionValue(_attrNameDef,_newAttrValue);
               },
             )
           );
@@ -203,6 +227,9 @@ class MGroupField extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    if(mEditableGroupObject==null){
+      return MEmpty();
+    }
     _extended = mEditableGroupObject.getReflectionExtended(parentAttributeName: parentAttributeName, actual:actualExtended);
     if(_extended!=null && _extended.grid>1){
       List<Widget> widgets = new List<Widget>();

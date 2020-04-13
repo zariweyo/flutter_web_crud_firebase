@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:firebase/firebase.dart' as Firebase;
+//import 'package:firebase/firebase.dart' as Firebase;
+import 'package:flutter_web_crud_firebase/module_canvaskit/index.dart';
 import 'package:flutter_web_crud_firebase/module_crud/index.dart';
+import '../../module_filehandle/base/filehandle_controller.dart';
 
 
 
@@ -41,27 +43,19 @@ class _MImageState extends State<MImage>{
   }
 
   _loadImage(){
-    //if(FWCFGlobals.filesPathsCache[widget.image.toString()]!=null){
-    //  _imagePath = FWCFGlobals.filesPathsCache[widget.image.toString()].toString();
-    //  return;
-    //}
+   
     errorLoad = false;
-    if(!Mfunctions.imageIsCDN(widget.image)){
-        Firebase.StorageReference _storageRef = Firebase.storage().ref(widget.image.toString());
-        Mfunctions.pathFileLoadFromStorage(_storageRef,cached: widget.cached).then((_pathImageResolved){
-          
-          setState(() {
-            _imagePath = _pathImageResolved;
-          });
-        })
-        .catchError((err){
-          setState(() {
-            errorLoad = true;
-          });
-        });
-    }else{
-      _imagePath = widget.image.toString();
-    }
+    FileHandleController fileHandleController = new FileHandleController();
+    fileHandleController.loadImage(widget.image).then((_imagePathResolved){
+      setState(() {
+        _imagePath = _imagePathResolved;
+      });
+    }).catchError((err){
+      setState(() {
+        errorLoad = true;
+      });
+    });
+    
   }
 
   Widget _printImage(){
@@ -75,8 +69,8 @@ class _MImageState extends State<MImage>{
       return Container(
         width: widget.width,
         height: widget.height,
-        child:Image.network(
-          _imagePath, 
+        child:CKNetworkImage(
+          src:_imagePath, 
           key:ValueKey(_key),
           width: widget.width, 
           height: widget.height,)

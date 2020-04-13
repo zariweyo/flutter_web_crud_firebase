@@ -28,11 +28,16 @@ class MTableManage extends StatefulWidget{
   Color checkboxColor;
   Color backgroundColor;
   Color borderColor;
+  Color textColor;
   String hintSearch;
   
 
-  MTableManage({Key key, this.onAddItem,this.height,@required this.items,this.onSearchChange,this.margin=EdgeInsets.zero, @required this.title,this.onEndList, 
-    this.onDelItem,this.itemsChecked, this.onEditItem,this.onCheckItem, this.titleDelete="",this.messageDelete="",
+  MTableManage({Key key, this.onAddItem,this.height,
+    @required this.items,this.onSearchChange,
+    this.margin=EdgeInsets.zero, 
+    @required this.title,this.onEndList, 
+    this.onDelItem,this.itemsChecked, 
+    this.onEditItem,this.onCheckItem, this.titleDelete="",this.messageDelete="",
     this.iconActionGlobal=Icons.settings,this.onActionGlobal, this.onCustomActions,
     this.deleteIconColor = Colors.white,
     this.headerTextColor = Colors.white,
@@ -41,6 +46,7 @@ class MTableManage extends StatefulWidget{
     this.customIconColor = Colors.white,
     this.checkboxColor = Colors.green,
     this.backgroundColor = Colors.white,
+    this.textColor = Colors.black,
     this.borderColor = Colors.black,
     this.hintSearch = "Search",
 
@@ -94,12 +100,12 @@ class _MTableManageState extends State<MTableManage>{
   _printDeleteButton(MTableable _item){
 
     if(_item.isDeleteable() && !deleting.contains(_item.getId()) && widget.onDelItem!=null){
-            return Expanded(
+            return Flexible(
               flex:1,
               child: IconButton(
                 icon: Icon(Icons.delete, color: widget.deleteIconColor),
                 onPressed: (){
-                  UtilMessages.showConfirmDialog(context, widget.titleDelete,  widget.messageDelete,
+                  MUtilMessages.showConfirmDialog(context, widget.titleDelete,  widget.messageDelete,
                     onAccept: (_context){
                       setState(() {
                         deleting.add(_item.getId());
@@ -115,7 +121,7 @@ class _MTableManageState extends State<MTableManage>{
                 )
               );
     }else if(_item.isDeleteable()){
-      return Expanded(
+      return Flexible(
               flex:1,
               child:MLoading(size:10)
             );
@@ -158,9 +164,9 @@ class _MTableManageState extends State<MTableManage>{
     if(_item.isEditable() && widget.onEditItem!=null){
       return Expanded(
       flex:1,
-      child: IconButton(
-        icon: Icon(Icons.edit, color: widget.editIconColor),
-        onPressed: (){
+      child: InkWell(
+        child: Icon(Icons.edit, color: widget.editIconColor),
+        onTap: (){
           if(widget.onEditItem!=null){
             widget.onEditItem(_item);
           }
@@ -196,7 +202,7 @@ class _MTableManageState extends State<MTableManage>{
 
   _printCustomActionButton(MTableable _item, MTableManageAction customAction){
     if(customAction.action != null && customAction.icon != null) {
-      return Expanded(
+      return Flexible(
         flex:1,
         child: IconButton(
           icon: Icon(customAction.icon),
@@ -210,7 +216,7 @@ class _MTableManageState extends State<MTableManage>{
   }
 
   _printCheckButton(MTableable _item){
-      return Expanded(
+      return Flexible(
       flex:1,
       child: Checkbox(
         checkColor: widget.checkboxColor,
@@ -235,12 +241,15 @@ class _MTableManageState extends State<MTableManage>{
       _widgetsButtons.add(_printDeleteButton(_item));
     }
     if(_item.isEditable() && widget.onEditItem!=null){
+      if(_widgetsButtons.length>0) _widgetsButtons.add(SizedBox(width: 2,));
       _widgetsButtons.add(_printEditButton(_item));
     }
     if(widget.onCheckItem!=null && widget.itemsChecked!=null){
+      if(_widgetsButtons.length>0) _widgetsButtons.add(SizedBox(width: 2,));
       _widgetsButtons.add(_printCheckButton(_item));
     }
     if(widget.onCustomActions!=null){
+      if(_widgetsButtons.length>0) _widgetsButtons.add(SizedBox(width: 2,));
       widget.onCustomActions.forEach((customAction) => _widgetsButtons.add(_printCustomActionButton(_item, customAction)));
     }
 
@@ -254,55 +263,28 @@ class _MTableManageState extends State<MTableManage>{
     if(_widgetsButtons.length>0){
       _widgets.add(
           Expanded(
-             flex: (_widgetsButtons.length/2).floor()+1,
+             flex: 2,
              child: Container(
-               padding: EdgeInsets.only(left: 20),
                child:Row(children: _widgetsButtons,),
              )
           )
       );
     }
 
-    if(_item.getTableColumns()==null || _item.getTableColumns().length==0){
-      _widgets.add(  
-          Expanded(
-             flex:6,
-             child: Container(
-               padding: EdgeInsets.only(left: 20),
-               child:Text(_item.getTitle()),
-             )
-          )
-      );
-
-
-
-      _widgets.add(  
-          Expanded(
-             flex:4,
-             child: Container(
-               padding: EdgeInsets.only(left: 10,right: 5),
-               child:Text(
-                _item.getDescription(),
-                textAlign: TextAlign.right,
-               ),
-             )
-               
-          )
-      );
-    }else{
+    
       _item.getTableColumns().forEach((_wid){
         _widgets.add(
           Expanded(
              flex:4,
              child: Container(
-               padding: EdgeInsets.symmetric(horizontal: 5),
+               padding: EdgeInsets.symmetric(horizontal: 2),
                child:_wid,
              )
                
           )
         );
       });
-    }
+    
     
 
     return _widgets;
@@ -312,7 +294,9 @@ class _MTableManageState extends State<MTableManage>{
     
 
     List<Widget> _widgets = new List<Widget>();
+    List<Widget> _widgetsButtons = _widgetsZoneButtons(item);
 
+/*
     int _initFlex = (_widgetsZoneButtons(item).length/2).floor()+1;
     _widgets.add(
         Expanded(
@@ -320,16 +304,35 @@ class _MTableManageState extends State<MTableManage>{
              child:MEmpty()
         )
     );
+    */
+
+    if(_widgetsButtons.length>0){
+      _widgets.add(
+          Expanded(
+             flex: 2,
+             child: Container(
+               padding: EdgeInsets.only(left: 20),
+               child:MEmpty(),
+             )
+          )
+      );
+    }
+
+
 
     item.getTableHeader().forEach((_mhead){
       _widgets.add(
         Expanded(
              flex:4,
              child: Container(
-               padding: EdgeInsets.symmetric(horizontal: 5),
+               padding: EdgeInsets.symmetric(horizontal: 2),
                child:Text(
                  _mhead.title,
                  textAlign: TextAlign.center,
+                 style:TextStyle(
+                   color:widget.textColor,
+                   fontWeight: FontWeight.bold
+                 )
                 ),
              )
                
@@ -398,8 +401,10 @@ class _MTableManageState extends State<MTableManage>{
     items.forEach((_item){
       
       cards.add(
-        Row(
-         children: _widgetsZoneData(_item)
+        Container(
+          child:Row(
+            children: _widgetsZoneData(_item)
+          )
         )
         
       );
@@ -412,6 +417,7 @@ class _MTableManageState extends State<MTableManage>{
           //height: 300,
           //child:Scrollbar(
             child:ListView(
+              shrinkWrap: false,
               controller: scrollcontroller,
               children:cards
             )
