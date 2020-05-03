@@ -29,6 +29,8 @@ class MTableManage extends StatefulWidget{
   Color backgroundColor;
   Color borderColor;
   Color textColor;
+  Color searchBackgroundColor;
+  Color searchTextColor;
   String hintSearch;
   
 
@@ -48,6 +50,8 @@ class MTableManage extends StatefulWidget{
     this.backgroundColor = Colors.white,
     this.textColor = Colors.black,
     this.borderColor = Colors.black,
+    this.searchBackgroundColor = Colors.black,
+    this.searchTextColor = Colors.white,
     this.hintSearch = "Search",
 
       }) :super(key:key);
@@ -183,10 +187,13 @@ class _MTableManageState extends State<MTableManage>{
       return Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: widget.searchBackgroundColor,
           borderRadius: BorderRadius.all(Radius.circular(5))
         ),
         child:TextField(
+          style: TextStyle(
+            color: widget.searchTextColor,
+          ),
           decoration: new InputDecoration.collapsed(
             hintText: widget.hintSearch
           ),
