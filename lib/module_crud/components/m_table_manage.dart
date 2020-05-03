@@ -64,6 +64,8 @@ class _MTableManageState extends State<MTableManage>{
   List<MTableable> items;
   List<String> deleting;
   ScrollController scrollcontroller;
+
+  String _textSearch="";
   
 
   @override
@@ -198,7 +200,10 @@ class _MTableManageState extends State<MTableManage>{
             hintText: widget.hintSearch
           ),
           onChanged: (_change){
-            widget.onSearchChange(_change);
+            _textSearch = _change;
+          },
+          onEditingComplete: (){
+            widget.onSearchChange(_textSearch);
           },
         )
       );
