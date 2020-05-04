@@ -43,6 +43,7 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
   //InputElement uploadInput;
   int percent=100;
   FileHandleController fileHandleController;
+  bool _uploading = false;
 
   @override
   initState(){
@@ -80,12 +81,23 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
       type: widget.type, 
       size: widget.size, 
       handlePercent: _handlePercent,
-      onComplete: widget.onComplete,
+      onComplete: _onUploadComplete,
       onError: widget.onError
     );
   }
 
+  _onUploadComplete(){
+    print("UploadComplete");
+    setState(() {
+      _uploading = false;
+    });
+    widget.onComplete();
+  }
+
   _handlePercent(int _percent){
+    if(_percent<50){
+      _uploading = true;
+    }
     if(widget.showPercent){
       setState(() {
         percent = _percent;
@@ -105,7 +117,7 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
 
   @override
   Widget build(BuildContext context) {
-    if(widget.showPercent && percent<100){
+    if(widget.showPercent && _uploading){
       return _showPercent();
     }
     
