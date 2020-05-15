@@ -38,5 +38,16 @@ class FileHandleController implements FileHandleControllerBase{
     throw UnimplementedError();
   }
 
+  @override
+  loadFileUri({
+    @required String path,
+    @required Function(int) handlePercent,
+    Function(GenericError) onError,
+    Function() onComplete,
+  }){
+    // TODO: implement loadFileUri
+    throw UnimplementedError();
+  }
+
   
 }

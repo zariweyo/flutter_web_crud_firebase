@@ -18,5 +18,12 @@ abstract class FileHandleControllerBase{
     Function() onComplete,
   });
 
+  loadFileUri({
+    @required String path,
+    @required Function(int) handlePercent,
+    Function(GenericError) onError,
+    Function() onComplete,
+  });
+
 
 }
