@@ -21,6 +21,7 @@ class MFileUploadManage extends StatefulWidget{
   Widget uploadContainer;
   Widget deleteContainer;
   bool showPercent;
+  MEditableGroupFieldCDN cdn;
 
   MFileUploadManage({
     @required this.path, 
@@ -30,7 +31,8 @@ class MFileUploadManage extends StatefulWidget{
     this.showPercent=true,
     this.type = MFileUploadManageType.ALL, 
     this.size=-1, 
-    this.onError
+    this.onError,
+    this.cdn,
   });
 
   @override
@@ -44,6 +46,7 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
   int percent=100;
   FileHandleController fileHandleController;
   bool _uploading = false;
+  String _uri="";
 
   @override
   initState(){
@@ -86,6 +89,25 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
     );
   }
 
+  _startFileUri(Uri uri){
+    Uri uriDownload = uri;
+    if(widget.cdn.toString().length>0){
+      uriDownload = widget.cdn.getDownloadUri(uriDownload);
+    }
+
+    
+
+    fileHandleController.loadFileUri(
+      path: widget.path, 
+      type: widget.type, 
+      size: widget.size, 
+      handlePercent: _handlePercent,
+      onComplete: _onUploadComplete,
+      onError: widget.onError, 
+      uri: uriDownload
+    );
+  }
+
   _onUploadComplete(){
     print("UploadComplete");
     setState(() {
@@ -115,6 +137,37 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
     );
   }
 
+  _uriField(){
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: 500
+      ),
+      child:Row(
+        children: <Widget>[
+          Container(
+            constraints: BoxConstraints(
+              maxWidth: 300
+            ),
+            child:TextField(
+              decoration: InputDecoration(
+                hintText: "URL"
+              ),
+              onChanged: (_new){
+                _uri = _new;
+              },
+            ),
+          ),
+          FlatButton(
+            child:Icon(Icons.cloud_upload, color: Colors.black,),
+            onPressed: (){
+              _startFileUri(Uri.parse(_uri));
+            },
+          )
+        ],
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if(widget.showPercent && _uploading){
@@ -123,14 +176,22 @@ class _MFileUploadManageState extends State<MFileUploadManage>{
     
     return Container(
       margin: EdgeInsets.only(left: 20),
+      constraints: BoxConstraints(
+        maxWidth: 800
+      ),
       child:Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children:[
-          FlatButton(
-            child:widget.uploadContainer,
-            onPressed: (){
-              fileHandleController.callFilePicker();
-            },
+          Column(
+            children:[
+              FlatButton(
+                child:widget.uploadContainer,
+                onPressed: (){
+                  fileHandleController.callFilePicker();
+                },
+              ),
+              _uriField()
+            ]
           ),
           FlatButton(
             child:widget.deleteContainer,

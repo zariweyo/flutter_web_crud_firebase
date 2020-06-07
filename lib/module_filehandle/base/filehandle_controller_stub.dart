@@ -36,8 +36,11 @@ class FileHandleController implements FileHandleControllerBase{
 
   @override
   loadFileUri({
+    @required Uri uri,
     @required String path,
     @required Function(int) handlePercent,
+    @required MFileUploadManageType type,
+    @required int size,
     Function(GenericError) onError,
     Function() onComplete,
   }){

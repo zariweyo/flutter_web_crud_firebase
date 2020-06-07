@@ -181,7 +181,7 @@ class MFile implements MTableable,MEditableGroupObject{
   @override
   MEditableGroupFieldExtended getReflectionExtended({String parentAttributeName, MEditableGroupFieldExtended actual}) {
     MEditableGroupFieldExtended _extended = new MEditableGroupFieldExtended();
-    _extended.grid=2;
+    _extended.grid=1;
     
     Map<String,dynamic> _map = new  Map<String,dynamic>();
     _map['Description']="Description";

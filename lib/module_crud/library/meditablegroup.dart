@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 
 abstract class MEditableGroupObject{
   Map<String,dynamic> getReflectionAttributes();
@@ -16,10 +18,39 @@ enum MEditableGroupFieldExtendedType{
 }
 
 class MEditableGroupFieldExtended{
+  MEditableGroupFieldCDN cdn = new MEditableGroupFieldCDN();
   Map<String,dynamic> groups = new Map<String,dynamic>();
   Map<String,IconData> icons = new Map<String,IconData>();
   Map<String,MEditableGroupFieldExtendedType> types = new Map<String,MEditableGroupFieldExtendedType>();
   int grid=0;
+}
+
+enum MEditableGroupFieldCDNImageMode{
+  STRING,
+  BASE64
+}
+
+class MEditableGroupFieldCDN{
+  Uri cdnUrl = Uri.parse("");
+  String replaceKey = "";
+  MEditableGroupFieldCDNImageMode imageMode = MEditableGroupFieldCDNImageMode.BASE64;
+  Uri getDownloadUri(Uri remoteUri){
+    String _remotePath = remoteUri.toString();
+    if(imageMode == MEditableGroupFieldCDNImageMode.BASE64){
+      List<int> bytes =  utf8.encode(_remotePath);
+      _remotePath = base64Encode(bytes);
+    }
+
+    print(cdnUrl.toString());
+    print(replaceKey);
+    print(_remotePath);
+
+    String cdnString = cdnUrl.toString().replaceAll(replaceKey, _remotePath);
+
+    print(cdnString);
+
+    return Uri.parse(cdnString);
+  }
 }
 
 class MEditableGroupFieldListItem{

@@ -141,6 +141,7 @@ class MGroupField extends StatelessWidget{
             path: _image.path,
             //maxBytes: FWCFGlobals.MAXBYTESIMAGEUPLOAD,
             width: 150,
+            cdn: _extended.cdn,
             height: 150,
             onUpload: (){
                 _attrValue = Uri.parse(_image.path);

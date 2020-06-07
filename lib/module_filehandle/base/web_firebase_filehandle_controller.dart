@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:html';
 
+import 'package:dio/dio.dart';
 import 'package:firebase/firebase.dart' as Firebase;
 import 'package:flutter/material.dart';
 import 'package:flutter_web_crud_firebase/module_crud/index.dart';
+//import 'package:http/http.dart';
 
 import 'filehandle_controller_abs.dart';
 
@@ -18,9 +20,74 @@ class FileHandleController implements FileHandleControllerBase{
     return Firebase.storage().ref(path).delete();
   }
 
+  @override
+  Future<void> loadFileUri({
+    @required Uri uri,
+    @required String path,
+    @required Function(int) handlePercent,
+    @required MFileUploadManageType type,
+    @required int size,
+    Function(GenericError) onError,
+    Function() onComplete,
+  }) async{
+    String url = uri.toString(); 
+    print(url);
+    Response<List<int>> response = await Dio().get<List<int>>(url, options: Options(responseType: ResponseType.bytes)); 
+
+    int sizeFile = response.data.length;
+
+    print(sizeFile);
+
+    if(size>=0 && sizeFile>size){
+        if(onError!=null){
+          onError(GenericError(
+            code: "UPLOAD_001",
+            message: "Max_size_upload_exceded",
+            origin: MFileUploadManage
+          ));
+        }
+      }else{
+
+        _uploadFileBytes(response.data, path,onChangePercent: handlePercent).then((_uploaded){
+            if(_uploaded){
+              if(onComplete!=null) onComplete();
+            }else{
+              if(onError!=null) onError(
+                GenericError(
+                  code: "UPLOAD_012",
+                  message: "Upload_failed",
+                  origin: MFileUploadManage
+                )
+              );
+            }
+          }).catchError((err){
+            if(onError!=null) onError(
+              GenericError(
+                  code: "UPLOAD_013",
+                  message: "Upload_error",
+                  origin: MFileUploadManage
+              )
+            );
+          });
+      }
+    
+    
+  }
+
+  Future<bool> _uploadFileBytes(List<int> blob,String path,{Function(int) onChangePercent}) {
+    Firebase.UploadTask _uploadTask = Firebase.storage().ref(path).put(blob);
+
+    return _uploadFileData(_uploadTask,onChangePercent:onChangePercent);
+  }
+
   Future<bool> _uploadFile(String blob,String path,{Function(int) onChangePercent}) {
-    Completer completer = new Completer<bool>();
     Firebase.UploadTask _uploadTask = Firebase.storage().ref(path).putString(blob,'data_url');
+
+    return _uploadFileData(_uploadTask,onChangePercent:onChangePercent);
+  }
+
+  Future<bool> _uploadFileData(Firebase.UploadTask _uploadTask,{Function(int) onChangePercent}) {
+    Completer completer = new Completer<bool>();
 
     StreamSubscription<Firebase.UploadTaskSnapshot> _stream;
     _stream = _uploadTask.onStateChanged.listen((_data){

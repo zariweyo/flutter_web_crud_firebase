@@ -12,7 +12,17 @@ class MImageField extends StatefulWidget{
   double height;
   String name;
   int maxBytes;
-  MImageField({this.path,this.name="",this.onError,this.width=100,this.height=100,this.onUpload,this.maxBytes=-1});
+  MEditableGroupFieldCDN cdn;
+  MImageField({
+    this.path,
+    this.name="",
+    this.onError,
+    this.width=100,
+    this.height=100,
+    this.onUpload,
+    this.maxBytes=-1,
+    this.cdn
+  });
 
 
   
@@ -40,6 +50,7 @@ class _MImageFieldState extends State<MImageField>{
       uploadContainer: MImage(image: _image,width: widget.width, height: widget.height, margin:EdgeInsets.all(10),cached: false,),
       deleteContainer: Icon(Icons.delete),
       path:widget.path,
+      cdn: widget.cdn,
       type: MFileUploadManageType.IMAGE,
       onError: (err){
         if(widget.onError!=null) widget.onError(err);
