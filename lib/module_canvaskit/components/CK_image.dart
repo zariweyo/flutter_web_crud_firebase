@@ -39,7 +39,7 @@ class _CKNetworkImageState extends State<CKNetworkImage> {
   }
 
   void _fetchData() async {
-    _bytes = (await http.get(widget.src)).bodyBytes;
+    _bytes = (await http.get(Uri.parse(widget.src))).bodyBytes;
 
     if (mounted) {
       setState(() {});

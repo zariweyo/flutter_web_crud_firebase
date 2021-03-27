@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:html';
 
 import 'package:dio/dio.dart';
-import 'package:firebase/firebase.dart' as Firebase;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_crud_firebase/module_crud/index.dart';
 //import 'package:http/http.dart';
@@ -17,7 +18,7 @@ class FileHandleController implements FileHandleControllerBase{
 
   @override
   Future<dynamic> deleteFile(String path) {
-    return Firebase.storage().ref(path).delete();
+    return FirebaseStorage.instance.ref(path).delete();
   }
 
   @override
@@ -75,22 +76,22 @@ class FileHandleController implements FileHandleControllerBase{
   }
 
   Future<bool> _uploadFileBytes(List<int> blob,String path,{Function(int) onChangePercent}) {
-    Firebase.UploadTask _uploadTask = Firebase.storage().ref(path).put(blob);
+    UploadTask _uploadTask = FirebaseStorage.instance.ref(path).putBlob(blob);
 
     return _uploadFileData(_uploadTask,onChangePercent:onChangePercent);
   }
 
   Future<bool> _uploadFile(String blob,String path,{Function(int) onChangePercent}) {
-    Firebase.UploadTask _uploadTask = Firebase.storage().ref(path).putString(blob,'data_url');
+    UploadTask _uploadTask = FirebaseStorage.instance.ref(path).putString(blob,format: PutStringFormat.dataUrl);
 
     return _uploadFileData(_uploadTask,onChangePercent:onChangePercent);
   }
 
-  Future<bool> _uploadFileData(Firebase.UploadTask _uploadTask,{Function(int) onChangePercent}) {
+  Future<bool> _uploadFileData(UploadTask _uploadTask,{Function(int) onChangePercent}) {
     Completer completer = new Completer<bool>();
 
-    StreamSubscription<Firebase.UploadTaskSnapshot> _stream;
-    _stream = _uploadTask.onStateChanged.listen((_data){
+    StreamSubscription<TaskSnapshot> _stream;
+    _stream = _uploadTask.snapshotEvents.listen((_data){
         print(_data.state);
         print(_data.bytesTransferred.toString()+" / "+_data.totalBytes.toString());
         if(onChangePercent!=null){
@@ -120,7 +121,7 @@ class FileHandleController implements FileHandleControllerBase{
   }
 
   
-  Future<String> _pathFileLoadFromStorage(Firebase.StorageReference imageReference,{ bool cached=true }) {
+  Future<String> _pathFileLoadFromStorage(Reference imageReference,{ bool cached=true }) {
     Completer completer = new Completer<String>();
     if(imageReference.fullPath==""){
       completer.completeError(GenericError(code:"IM230",message:"Error_storage_path_is_empty",origin: Mfunctions));
@@ -150,7 +151,7 @@ class FileHandleController implements FileHandleControllerBase{
   Future<String> loadImage(Uri image){
     Completer completer = new Completer<String>();
     if(!Mfunctions.imageIsCDN(image)){
-        Firebase.StorageReference _storageRef = Firebase.storage().ref(image.toString());
+        Reference _storageRef = FirebaseStorage.instance.ref(image.toString());
         _pathFileLoadFromStorage(_storageRef,cached: false).then((_pathImageResolved){
           
           completer.complete(_pathImageResolved);

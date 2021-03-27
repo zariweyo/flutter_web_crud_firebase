@@ -9,16 +9,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase: ^7.1.0
-  firebase_core: ^0.6.0
-  firebase_storage: ^6.0.0
+  firebase_core: ^1.0.2
+  firebase_storage: ^8.0.1
   percent_indicator: ^2.1.1+1
   uuid: ^2.0.1
-  url_launcher: ^5.4.2
+  url_launcher: ^6.0.0-nullsafety
   #url_launcher_web: ^0.1.0
   flutter_colorpicker: ^0.3.2
-  http: ^0.12.0+2
-  dio: ^3.0.9
+  http: ^0.13.0
+  dio: ^4.0.0-beta1
 
 dev_dependencies:
   flutter_test:
