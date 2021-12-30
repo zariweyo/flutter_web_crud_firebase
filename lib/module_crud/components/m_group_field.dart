@@ -26,7 +26,7 @@ class MGroupField extends StatelessWidget{
 
 
   _getAtributesEditableWidgets(){
-    List<Widget> widgets = new List<Widget>();
+    List<Widget> widgets = [];
     mEditableGroupObject.getReflectionAttributes().forEach((_attrNameDef,_attrValue){
       String _attrName = mEditableGroupObject.getReflectionTranslates()[_attrNameDef];
       if(_attrName==null || _attrName==""){
@@ -36,7 +36,7 @@ class MGroupField extends StatelessWidget{
       if(_attrValue is MEditableGroupFieldList){
         MEditableGroupFieldList _itemsEditable = _attrValue;
 
-        List<DropdownMenuItem> _items = new List<DropdownMenuItem>();
+        List<DropdownMenuItem> _items = [];
         _itemsEditable.mGroupFieldListItem.forEach((_mEditableGroupFieldListItem){
           _items.add(DropdownMenuItem(
             value:_mEditableGroupFieldListItem.value,
@@ -85,12 +85,12 @@ class MGroupField extends StatelessWidget{
 
         
         
-        List<TextInputFormatter> _inputFormatters = new List<TextInputFormatter>();
+        List<TextInputFormatter> _inputFormatters = [];
         if(_attrValue is int){
-          _inputFormatters.add(WhitelistingTextInputFormatter(RegExp(r"[\-0-9]")));
+          _inputFormatters.add(FilteringTextInputFormatter.allow(RegExp(r"[\-0-9]")));
         }
         if(_attrValue is MDouble || _attrValue is double){
-          _inputFormatters.add(WhitelistingTextInputFormatter(RegExp(r"[\-0-9\.]")));
+          _inputFormatters.add(FilteringTextInputFormatter.allow(RegExp(r"[\-0-9\.]")));
         }
 
         widgets.add(
@@ -233,7 +233,7 @@ class MGroupField extends StatelessWidget{
     }
     _extended = mEditableGroupObject.getReflectionExtended(parentAttributeName: parentAttributeName, actual:actualExtended);
     if(_extended!=null && _extended.grid>1){
-      List<Widget> widgets = new List<Widget>();
+      List<Widget> widgets = [];
       _getAtributesEditableWidgets().forEach((_fieldWidget){
         widgets.add(Flexible(
           flex:1,
@@ -241,7 +241,7 @@ class MGroupField extends StatelessWidget{
         ));
       });
 
-      List<Widget> rows = new List<Widget>();
+      List<Widget> rows = [];
       for(int i=0;i<widgets.length; i+=_extended.grid){
         int last = i+_extended.grid;
         if(last>widgets.length) last=widgets.length;
